@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Churn Prediction + SHAP</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+  <header class="hero">
+    <p class="eyebrow">XGBoost • SHAP • Explainable AI</p>
+    <h1>Customer Churn Predictor</h1>
+    <p>Enter customer information to estimate churn risk and inspect the model factors behind the prediction.</p>
+  </header>
+
+  <form method="post" class="card form-grid">
+    {% for field, options in categories.items() %}
+      <label>{{ field|replace('_', ' ')|title }}
+        <select name="{{ field }}">
+          {% for option in options %}
+            <option value="{{ option }}" {% if values[field] == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    {% endfor %}
+    <label>Tenure (months)<input type="number" min="0" name="tenure" value="{{ values['tenure'] }}" required></label>
+    <label>Monthly Charges<input type="number" step="0.01" min="0" name="MonthlyCharges" value="{{ values['MonthlyCharges'] }}" required></label>
+    <label>Total Charges<input type="number" step="0.01" min="0" name="TotalCharges" value="{{ values['TotalCharges'] }}" required></label>
+    <div class="full"><button type="submit">Predict Churn</button></div>
+  </form>
+
+  <footer>
+    <a href="https://github.com/InfinitePraveen" target="_blank">GitHub</a>
+    <a href="https://www.linkedin.com/in/infinitepraveen/" target="_blank">LinkedIn</a>
+  </footer>
+</div>
+</body>
+</html>
