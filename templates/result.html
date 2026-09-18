@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prediction Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+  <header class="hero compact">
+    <p class="eyebrow">Prediction result</p>
+    <h1>{{ prediction }}</h1>
+    {% if not error %}<p>Estimated churn probability: <strong>{{ '%.1f'|format(probability * 100) }}%</strong></p>{% endif %}
+  </header>
+
+  {% if error %}
+    <div class="card error"><h2>Could not generate the prediction</h2><p>{{ error }}</p><p>Run the first notebook or make sure the machine has internet access so the public dataset can be downloaded.</p></div>
+  {% else %}
+    <div class="stats">
+      <div class="card"><span>Risk level</span><strong>{{ risk }}</strong></div>
+      <div class="card"><span>Churn probability</span><strong>{{ '%.1f'|format(probability * 100) }}%</strong></div>
+    </div>
+    <section class="card">
+      <h2>Top SHAP factors</h2>
+      <p class="muted">Positive values push the model output toward churn; negative values push it away from churn.</p>
+      <div class="factor-list">
+      {% for factor in factors %}
+        <div class="factor"><div><strong>{{ factor.feature }}</strong><span>{{ factor.direction }} churn tendency</span></div><b>{{ '%+.3f'|format(factor.value) }}</b></div>
+      {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <a class="back" href="/">← Try another customer</a>
+  <footer><a href="https://github.com/InfinitePraveen" target="_blank">GitHub</a><a href="https://www.linkedin.com/in/infinitepraveen/" target="_blank">LinkedIn</a></footer>
+</div>
+</body>
+</html>
